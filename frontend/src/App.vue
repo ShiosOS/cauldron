@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+console.log('API URL:', import.meta.env.VITE_API_URL)
+</script>
 
 <template>
   <h1>You did it!</h1>
