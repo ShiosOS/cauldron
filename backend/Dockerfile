@@ -1,12 +1,13 @@
-FROM golang:1.25-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o api cmd/api/main.go
+COPY *.csproj ./
+RUN dotnet restore
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-FROM alpine:latest
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
-COPY --from=builder /app/api .
+COPY --from=build /app/out .
 EXPOSE 8080
-CMD ["./api"]
+ENV ASPNETCORE_URLS=http://+:8080
+ENTRYPOINT ["dotnet", "Api.dll"]
