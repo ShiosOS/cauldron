@@ -1,13 +1,20 @@
 <script setup lang="ts">
-console.log('API URL:', import.meta.env.VITE_API_URL)
+import { ref, onMounted } from 'vue'
+import { api } from '@/api'
+
+const status = ref('')
+
+onMounted(async () => {
+  const data = await api('/api/health')
+  status.value = data.status
+})
 </script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div>
+    <h1>Cauldron</h1>
+    <p>Backend status: {{ status }}</p>
+  </div>
 </template>
 
 <style scoped></style>
