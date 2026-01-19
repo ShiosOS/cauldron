@@ -34,6 +34,4 @@ app.UseCors();
 
 app.MapControllers();
 
-app.MapGet("/api/health", () => new { status = "ok" });
-
 app.Run();
