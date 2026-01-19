@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("Connection string"
@@ -9,6 +10,9 @@ var connectionString =
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(connectionString));
+
+builder.Services.AddControllers();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -27,6 +31,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 app.UseCors();
+
+app.MapControllers();
 
 app.MapGet("/api/health", () => new { status = "ok" });
 
